@@ -11,7 +11,7 @@ class RestAPIsController extends Controller
      */
     public function index()
     {
-        return RestAPI::all();
+        return response()->json(['data'=>RestAPI::all()]);
     }
 
     /**
@@ -33,9 +33,9 @@ class RestAPIsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, RestAPI $RestAPI)
     {
-        //
+        return response()->json(['data' => $RestAPI->find($id)]);
     }
 
     /**
