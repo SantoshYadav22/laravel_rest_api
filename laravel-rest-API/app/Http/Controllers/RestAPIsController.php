@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\RestAPI;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RestAPIsController extends Controller
 {
@@ -27,7 +28,17 @@ class RestAPIsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string',
+            'last' => 'required|string',
+            'age' => 'required',
+            'contact' => 'required',
+            'email' => 'required|email',
+        ]);
+        $restAPI = RestAPI::create($data);
+
+        return response()->json(['data' => $restAPI], 201); // 201 Created status code
+   
     }
 
     /**
@@ -41,9 +52,9 @@ class RestAPIsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id, RestAPI $RestAPI)
     {
-        //
+        return response()->json(['data' => $RestAPI->find($id)]);
     }
 
     /**
@@ -51,7 +62,22 @@ class RestAPIsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $restAPI = RestAPI::find($id);
+
+        // Check if the record exists
+        if (!$restAPI) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+        $data = $request->validate([
+            'name' => 'required|string',
+            'last' => 'required|string',
+            'age' => 'required|integer',
+            'contact' => 'required',
+            'email' => 'required|email',
+        ]);
+        $restAPI->update($data);
+
+        return response()->json(['data' => $restAPI], 200); 
     }
 
     /**
