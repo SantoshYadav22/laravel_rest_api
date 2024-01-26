@@ -85,6 +85,18 @@ class RestAPIsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $restAPI = RestAPI::find($id);
+
+        // Check if the record exists
+        if (!$restAPI) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    
+        // Delete the record
+        $restAPI->delete();
+    
+        // Return a success response
+        return response()->json(['message' => 'Record deleted successfully'], 200);
+    
     }
 }
